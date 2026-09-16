@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Web Mining - Preprocessing</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+        <div class="logo">WM</div>
+
+        <div>
+            <h2>WEB MINING</h2>
+            <p>Web Mining Project</p>
+        </div>
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+        <a href="index.html" class="menu-item">
+            <span>⌂</span>
+            <span>Beranda</span>
+        </a>
+
+        <a href="profil.html" class="menu-item">
+            <span>👤</span>
+            <span>Profil</span>
+        </a>
+
+        <a href="pengantar.html" class="menu-item">
+            <span>📖</span>
+            <span>Pengantar Web Mining</span>
+        </a>
+
+        <a href="crawling.html" class="menu-item">
+            <span>🕷</span>
+            <span>Crawling</span>
+        </a>
+
+        <a href="hasil-crawling.html" class="menu-item">
+            <span>📊</span>
+            <span>Hasil Crawling</span>
+        </a>
+
+        <a href="preprocessing.html" class="menu-item active">
+            <span>⚙️</span>
+            <span>Preprocessing & TF-IDF</span>
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+        <p>Web Mining</p>
+        <small>2026</small>
+    </div>
+
+</aside>
+
+
+<main class="main-content">
+
+    <header class="topbar">
+        <span>Web Mining</span>
+        <span>/</span>
+        <strong>Preprocessing & TF-IDF</strong>
+    </header>
+
+
+    <section class="page-content">
+
+        <!-- JUDUL -->
+        <div class="section-heading">
+
+            <span class="section-number">02</span>
+
+            <div>
+                <h2>Preprocessing & TF-IDF</h2>
+                <p>Pengolahan dan representasi data teks berita</p>
+            </div>
+
+        </div>
+
+
+        <!-- PENJELASAN -->
+        <div class="content-card">
+
+            <h2>Preprocessing Data Teks</h2>
+
+            <p>
+                Tahap preprocessing dilakukan untuk mempersiapkan teks berita
+                sebelum digunakan dalam proses ekstraksi fitur.
+                Data yang digunakan merupakan hasil crawling sebanyak
+                <strong>200 berita</strong> dari kategori Sport dan Finance.
+            </p>
+
+            <p>
+                Preprocessing adalah proses mempersiapkan teks agar lebih mudah diolah oleh komputer. 
+                Pada tahap ini, teks berita yang masih memiliki berbagai variasi penulisan dibersihkan dan dinormalisasi.
+            </p>
+
+        </div>
+
+
+        <!-- TAHAP PREPROCESSING -->
+        <div class="section-heading">
+
+            <span class="section-number">01</span>
+
+            <div>
+                <h2>Tahapan Preprocessing</h2>
+                <p>Proses pembersihan dan normalisasi teks</p>
+            </div>
+
+        </div>
+
+
+        <!-- CODE 1 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>01</span>
+
+                <div>
+                    <h2>Import Library</h2>
+                    <p>Library yang digunakan pada proses pembersihan dan normalisasi</p>
+                </div>
+            </div>
+
+<pre><code>
+import pandas as pd
+import re
+import nltk
+
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from nltk.corpus import stopwords
+
+print("Library berhasil di-import!")</code></pre>
+
+<p>
+    Pada sel pertama dilakukan import library yang diperlukan untuk proses preprocessing dan analisis teks.
+</p>
+
+<p>
+    <strong>pandas</strong> digunakan untuk membaca dan mengolah dataset dalam bentuk DataFrame.
+    <strong>re</strong> atau Regular Expression digunakan untuk melakukan pembersihan teks,
+    seperti menghapus URL, angka, dan karakter khusus. <strong>nltk</strong> digunakan untuk
+    membantu proses pengolahan bahasa alami, khususnya dalam mengambil daftar
+    stopword Bahasa Indonesia.
+</p>
+
+<p>
+    Selain itu, digunakan library Sastrawi melalui StemmerFactory untuk melakukan
+    stemming Bahasa Indonesia. Sementara <strong>stopwords</strong> digunakan untuk mengambil
+    daftar kata umum yang akan dihilangkan dari teks.
+    Jika semua library berhasil dimuat, program menampilkan pesan berhasil.
+</p>
+
+
+        </div>
+
+
+        <!-- CODE 2 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>02</span>
+
+                <div>
+                    <h2>Membaca Dataset</h2>
+                </div>
+            </div>
+
+<pre><code>df = pd.read_csv(
+    "dataset_detik.csv",
+    sep=";",
+    encoding="utf-8-sig"
+)
+
+print("Dataset berhasil dibaca!")
+print("Jumlah data:", len(df))
+print("Jumlah kolom:", len(df.columns))
+
+display(df.head())
+</code></pre>
+
+
+        </div>
+
+
+        <!-- CODE 3 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>03</span>
+
+                <div>
+                    <h2>Melihat Kondisi Data sebelum Preprocessing</h2>
+                </div>
+            </div>
+
+<pre><code>print("Contoh berita sebelum preprocessing:\n")
+print(df["isi_berita"].iloc[0])
+
+print("\nPanjang teks berita pertama:")
+print(len(df["isi_berita"].iloc[0]))
+
+print("\nDistribusi label:")
+print(df["label"].value_counts())</code></pre>
+
+        </div>
+
+
+        <!-- CODE 4 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>04</span>
+
+                <div>
+                    <h2>Mendownload Stopwords</h2>
+                </div>
+            </div>
+
+<pre><code>nltk.download("stopwords")</code></pre>
+
+<p>
+    Sel keempat digunakan untuk mengunduh dataset stopword dari NLTK.
+Stopword adalah kata-kata umum yang biasanya memiliki informasi yang relatif rendah dalam proses analisis teks.
+Contohnya dalam Bahasa Indonesia: yang, dan, di, ke, dari, untuk
+Daftar stopword ini nantinya digunakan pada proses stopword removal.
+</p>
+
+        </div>
+
+
+        <!-- CODE 5 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>05</span>
+
+                <div>
+                    <h2>Menyiapkan Stopword dan Stemming</h2>
+                </div>
+            </div>
+
+<pre><code>
+    stop_words = set(stopwords.words("indonesian"))
+
+factory = StemmerFactory()
+stemmer = factory.create_stemmer()
+
+print("Jumlah stopword:", len(stop_words))
+print("Stemmer Bahasa Indonesia berhasil dibuat!")
+</code></pre>
+
+<p>
+    Sel kelima digunakan untuk menyiapkan daftar stopword Bahasa Indonesia dan stemmer.
+Daftar stopword diambil dari NLTK, kemudian diubah menjadi <em>set</em> agar dapat digunakan pada proses <em>stopword removal</em>.
+Selanjutnya, <strong>Sastrawi Stemmer</strong> dibuat untuk mengubah kata ke bentuk dasarnya pada tahap stemming.
+</p>
+
+        </div>
+
+
+        <!-- CODE 6 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>06</span>
+
+                <div>
+                    <h2>Membuat Fungsi Preprocessing</h2>
+                </div>
+            </div>
+
+<pre><code>
+    def preprocessing_teks(teks):
+    # 1. Case folding
+    teks = teks.lower()
+
+    # 2. Menghapus URL
+    teks = re.sub(r"http\S+|www\S+", "", teks)
+
+    # 3. Menghapus angka
+    teks = re.sub(r"\d+", "", teks)
+
+    # 4. Menghapus tanda baca dan karakter khusus
+    teks = re.sub(r"[^a-zA-Z\s]", " ", teks)
+
+    # 5. Menghapus spasi berlebih
+    teks = re.sub(r"\s+", " ", teks).strip()
+
+    # 6. Tokenisasi sederhana
+    tokens = teks.split()
+
+    # 7. Stopword removal
+    tokens = [kata for kata in tokens if kata not in stop_words]
+
+    # 8. Stemming Bahasa Indonesia
+    tokens = [stemmer.stem(kata) for kata in tokens]
+
+    # Menggabungkan kembali menjadi teks
+    return " ".join(tokens)
+
+print("Fungsi preprocessing berhasil dibuat!")
+</code></pre>
+
+
+        </div>
+
+
+        <!-- CODE 7 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>07</span>
+
+                <div>
+                    <h2>Menerapkan Preprocessing ke Dataset</h2>
+                </div>
+            </div>
+
+<pre><code>
+    df["teks_preprocessed"] = df["isi_berita"].apply(preprocessing_teks)
+
+print("Preprocessing selesai!")
+display(df[["id", "isi_berita", "teks_preprocessed", "label"]].head())
+</code></pre>
+
+
+        </div>
+
+
+
+        <!-- CODE 8 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>08</span>
+
+                <div>
+                    <h2>Membuat Matriks TF-IDF</h2>
+                </div>
+            </div>
+
+<pre><code>
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Membuat objek TF-IDF
+vectorizer = TfidfVectorizer()
+
+# Mengubah teks hasil preprocessing menjadi matriks TF-IDF
+tfidf_matrix = vectorizer.fit_transform(df["teks_preprocessed"])
+
+print("TF-IDF berhasil dibuat!")
+print("Jumlah dokumen :", tfidf_matrix.shape[0])
+print("Jumlah fitur/kata unik :", tfidf_matrix.shape[1])
+</code></pre>
+
+
+        </div>
+
+
+        
+        <!-- CODE 9 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>09</span>
+
+                <div>
+                    <h2>Melihat Kata Unik</h2>
+                </div>
+            </div>
+
+<pre><code>
+    fitur_kata = vectorizer.get_feature_names_out()
+
+print("Jumlah seluruh kata unik:", len(fitur_kata))
+print("\n10 kata unik pertama:")
+print(fitur_kata[:10])
+</code></pre>
+
+
+        </div>
+
+
+        <!-- CODE 10 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>10</span>
+
+                <div>
+                    <h2>Reduksi Dimensi dengan PCA</h2>
+                </div>
+            </div>
+
+<pre><code>from sklearn.decomposition import PCA
+
+tfidf_dense = tfidf_matrix.toarray()
+
+pca = PCA(n_components=0.90)
+tfidf_pca = pca.fit_transform(tfidf_dense)
+
+print("PCA berhasil dilakukan!")
+print("Ukuran data sebelum PCA :", tfidf_dense.shape)
+print("Ukuran data setelah PCA :", tfidf_pca.shape)
+print("Jumlah komponen :", pca.n_components_)
+print("Total explained variance :", pca.explained_variance_ratio_.sum())</code></pre>
+
+<p>
+    PCA digunakan untuk mereduksi jumlah dimensi pada matriks TF-IDF dengan tetap mempertahankan informasi sebanyak mungkin.
+    Pada implementasi ini digunakan <code>n_components=0.90</code>, sehingga PCA memilih jumlah komponen yang diperlukan untuk mempertahankan minimal 90% variasi data.
+    Dengan demikian, data TF-IDF yang semula memiliki ribuan fitur dapat direpresentasikan dengan jumlah komponen yang lebih sedikit.
+</p>
+
+        </div>
+
+
+
+        <!-- HASIL PCA -->
+        <div class="content-card">
+
+            <h2>Hasil Reduksi Dimensi PCA</h2>
+
+            <p>
+                Hasil PCA digunakan untuk melihat perubahan dimensi data TF-IDF setelah reduksi.
+                Berdasarkan hasil notebook, data yang semula berukuran <strong>200 × 5.068</strong> fitur direduksi menjadi sekitar <strong>200 × 138</strong> komponen dengan total explained variance sekitar <strong>90%</strong>.
+            </p>
+
+            <div style="margin-top:20px; padding:18px; border-radius:12px; background:#f5f7fb;">
+                <p><strong>Sebelum PCA:</strong> 200 dokumen × 5.068 fitur</p>
+                <p><strong>Setelah PCA:</strong> 200 dokumen × 138 komponen</p>
+                <p><strong>Tujuan:</strong> mengurangi jumlah dimensi tanpa kehilangan sebagian besar informasi/variasi data.</p>
+            </div>
+
+        </div>
+
+
+        <!-- CUMULATIVE VARIANCE -->
+        <div class="content-card">
+
+            <h2>Cumulative Explained Variance</h2>
+
+            <p>
+                Grafik berikut menunjukkan hubungan antara jumlah komponen
+                PCA dengan cumulative explained variance.
+            </p>
+
+            <div style="text-align:center; margin-top:20px;">
+
+                <img
+                    src="image.png"
+                    alt="Cumulative Explained Variance PCA"
+                    style="
+                        max-width:100%;
+                        border-radius:12px;
+                        box-shadow:0 5px 20px rgba(0,0,0,0.08);
+                    "
+                >
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <footer class="footer">
+
+        <p>© 2026 Web Mining Project</p>
+
+        <p>Universitas Trunojoyo Madura</p>
+
+    </footer>
+
+</main>
+
+</body>
+</html>

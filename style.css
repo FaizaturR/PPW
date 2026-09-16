@@ -486,7 +486,8 @@ body {
 }
 
 .description-card p,
-.content-card p {
+.content-card p,
+.code-section > p {
     color: #64747a;
 
     line-height: 1.8;

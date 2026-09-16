@@ -7,6 +7,25 @@
     <title>Web Mining - Pengantar</title>
 
     <link rel="stylesheet" href="style.css">
+
+<style>
+    .content-card ul {
+        padding-left: 1.4rem;
+        line-height: 1.8;
+    }
+    .content-card li {
+        margin-bottom: 0.35rem;
+    }
+    .content-card h3 {
+        margin-top: 1.2rem;
+    }
+    .source-note {
+        font-size: 0.85rem;
+        opacity: 0.75;
+        margin-top: 1rem;
+    }
+</style>
+
 </head>
 
 <body>
@@ -50,6 +69,11 @@
             <span>Hasil Crawling</span>
         </a>
 
+        <a href="preprocessing.html" class="menu-item">
+            <span>⚙️</span>
+            <span>Preprocessing & TF-IDF</span>
+        </a>
+
     </nav>
 
 
@@ -73,141 +97,332 @@
     <section class="page-content">
 
         <div class="section-heading">
-
             <span class="section-number">01</span>
-
             <div>
                 <h2>Pengantar Web Mining</h2>
                 <p>Pengenalan mengenai Web Mining</p>
             </div>
-
         </div>
-
 
         <div class="content-card">
-
             <h2>Apa Itu Web Mining?</h2>
-
             <p>
-                Web Mining merupakan proses penerapan teknik data mining
-                untuk menemukan dan mengekstraksi informasi atau pola
-                yang bermanfaat dari sumber data yang terdapat di web.
+                Web Mining merupakan proses penerapan teknik data mining untuk
+                menemukan dan mengekstraksi informasi atau pola yang bermanfaat
+                dari sumber data yang terdapat di web.
             </p>
-
             <p>
-                Web Mining memanfaatkan berbagai teknik untuk memperoleh
-                informasi dari halaman web, struktur web, maupun aktivitas
-                pengguna pada web.
+                Menurut <strong>Etzioni (1996)</strong>, Web Mining merupakan
+                penggunaan teknik data mining untuk secara otomatis menemukan
+                dan mengekstrak informasi dari layanan web. Menurut
+                <strong>Bing Liu (2007)</strong>, Web Mining bertujuan menemukan
+                pola-pola berguna atau pengetahuan dari struktur hyperlink web,
+                isi halaman web, serta perilaku pengguna.
             </p>
-
         </div>
 
+        <div class="content-card">
+            <h2>Tujuan Web Mining</h2>
+            <p>
+                Web Mining bertujuan membantu mahasiswa memahami dan menggunakan
+                konsep dasar serta teknologi Web Mining, sekaligus dapat
+                melakukan penelitian sistem informasi dalam konteks Web Mining.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>Tantangan Pemrosesan Data Web</h2>
+            <p>
+                Web memiliki karakteristik data yang sangat besar dan kompleks,
+                sehingga proses penambangan data pada web memiliki beberapa
+                tantangan.
+            </p>
+            <ul>
+                <li>Web merupakan pangkalan data yang sangat besar.</li>
+                <li>Data tersedia dalam berbagai format seperti HTML, XML, dan text.</li>
+                <li>Web sangat kompleks.</li>
+                <li>Web sangat dinamis.</li>
+                <li>Web bukan domain yang spesifik.</li>
+                <li>Web mencakup berbagai jenis informasi.</li>
+            </ul>
+            <p class="source-note">
+                Sumber: Turban et al. (2011), <em>Decision Support and Business Intelligence Systems</em>.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>Taxonomy Web Mining</h2>
+            <p>
+                Web Mining terdiri dari beberapa bidang utama yang saling
+                berkaitan, yaitu Web Content Mining, Web Usage Mining, dan
+                Web Structure Mining.
+            </p>
+        </div>
 
         <div class="topic-grid">
 
             <div class="topic-card">
-
-                <div class="topic-icon">🕷️</div>
-
-                <h3>Web Crawling</h3>
-
-                <p>
-                    Proses pengumpulan data atau halaman web dari internet
-                    secara otomatis menggunakan program atau crawler.
-                </p>
-
-            </div>
-
-
-            <div class="topic-card">
-
-                <div class="topic-icon">🧹</div>
-
-                <h3>Web Data Preprocessing</h3>
-
-                <p>
-                    Tahap persiapan data sebelum digunakan pada proses
-                    analisis atau pengolahan lebih lanjut.
-                </p>
-
-            </div>
-
-
-            <div class="topic-card">
-
                 <div class="topic-icon">📄</div>
-
                 <h3>Web Content Mining</h3>
-
                 <p>
-                    Proses menemukan informasi atau pola dari isi
-                    halaman web.
+                    Proses mengekstrak informasi berguna dari dokumen-dokumen web.
+                    Fokusnya dapat berupa teks, gambar, audio, video, maupun data
+                    terstruktur seperti tabel dan daftar.
                 </p>
-
             </div>
 
-
             <div class="topic-card">
-
-                <div class="topic-icon">🔗</div>
-
-                <h3>Web Structure Mining</h3>
-
+                <div class="topic-icon">🕷️</div>
+                <h3>Web Crawling</h3>
                 <p>
-                    Analisis struktur hubungan antar halaman atau
-                    dokumen yang terdapat pada web.
+                    Proses pengumpulan dokumen atau data dari web secara otomatis.
+                    Crawling digunakan untuk memperoleh data web yang kemudian
+                    dapat dieksplorasi dan dianalisis.
                 </p>
-
             </div>
 
+            <div class="topic-card">
+                <div class="topic-icon">🧹</div>
+                <h3>Web Data Preprocessing</h3>
+                <p>
+                    Proses mentransformasikan data ke dalam representasi yang
+                    sesuai dengan metode data mining, termasuk reduksi dimensi,
+                    seleksi fitur, dan transformasi teks menjadi vektor atau embedding.
+                </p>
+            </div>
 
             <div class="topic-card">
+                <div class="topic-icon">🎯</div>
+                <h3>Supervised Learning</h3>
+                <p>
+                    Pembelajaran terawasi menggunakan data yang memiliki label
+                    untuk membangun model klasifikasi atau prediksi.
+                </p>
+            </div>
 
+            <div class="topic-card">
+                <div class="topic-icon">🔎</div>
+                <h3>Unsupervised Learning</h3>
+                <p>
+                    Pembelajaran tak terawasi digunakan untuk menemukan pola
+                    atau kelompok dalam data tanpa menggunakan label.
+                </p>
+            </div>
+
+            <div class="topic-card">
                 <div class="topic-icon">👥</div>
-
                 <h3>Web Usage Mining</h3>
-
                 <p>
-                    Analisis pola penggunaan web berdasarkan aktivitas
-                    atau perilaku pengguna.
+                    Ekstraksi informasi dari data yang dihasilkan melalui
+                    kunjungan halaman web dan transaksi, termasuk log dan
+                    data clickstream.
                 </p>
-
             </div>
 
+            <div class="topic-card">
+                <div class="topic-icon">🔗</div>
+                <h3>Web Structure Mining</h3>
+                <p>
+                    Penemuan dan interpretasi pola pada struktur hyperlink
+                    serta hubungan antaraktor yang berinteraksi di web.
+                </p>
+            </div>
 
             <div class="topic-card">
-
-                <div class="topic-icon">🤖</div>
-
-                <h3>Machine Learning</h3>
-
+                <div class="topic-icon">🚀</div>
+                <h3>Deployment System</h3>
                 <p>
-                    Teknik pembelajaran dari data yang dapat digunakan
-                    untuk menemukan pola dan melakukan klasifikasi
-                    maupun prediksi.
+                    Tahap penerapan hasil atau model Web Mining ke dalam
+                    suatu sistem agar dapat digunakan dalam kebutuhan nyata.
                 </p>
-
             </div>
 
         </div>
 
+        <div class="content-card">
+            <h2>Text Mining</h2>
+            <p>
+                Text Mining merupakan proses mendapatkan informasi yang
+                berkualitas dari teks. Text Mining termasuk salah satu bagian
+                dari Web Content Mining.
+            </p>
+            <p>Beberapa tugas Text Mining antara lain:</p>
+            <ul>
+                <li>Text categorization / classification.</li>
+                <li>Text clustering.</li>
+                <li>Concept/entity extraction dan topic modelling.</li>
+                <li>Sentiment analysis.</li>
+                <li>Document summarization.</li>
+            </ul>
+        </div>
 
         <div class="content-card">
+            <h2>Klasifikasi Dokumen</h2>
+            <p>
+                Klasifikasi dokumen bertujuan mengategorikan dokumen atau gambar
+                yang sebelumnya belum pernah dilihat ke dalam kelas tertentu
+                dengan seakurat mungkin.
+            </p>
+            <p><strong>Contoh aplikasi:</strong> kategorisasi berita,
+                kategorisasi produk, dan deteksi spam.</p>
+            <p>
+                <strong>Metode:</strong> Naive Bayes, Support Vector Machines (SVM),
+                Deep Neural Networks, dan Transformers.
+            </p>
+        </div>
 
+        <div class="content-card">
+            <h2>Pengelompokan Konten</h2>
+            <p>
+                Pengelompokan konten dilakukan dengan mencari kelompok dokumen
+                berdasarkan ukuran kesamaan. Dokumen dalam satu kelompok lebih
+                mirip satu sama lain, sedangkan dokumen dari kelompok berbeda
+                memiliki kemiripan yang lebih rendah.
+            </p>
+            <p>
+                <strong>Aplikasi:</strong> pengelompokan hasil pencarian dan
+                penemuan topik.
+            </p>
+            <p>
+                <strong>Teknik:</strong> K-Means, Hierarchical Clustering,
+                S-BERT, serta ukuran kemiripan Cosine dan Jaccard.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>Analisis Sentimen</h2>
+            <p>
+                Analisis sentimen merupakan tugas mengklasifikasikan polaritas
+                teks pada tingkat dokumen, kalimat, atau fitur/atribut.
+            </p>
+            <p>
+                <strong>Nilai polaritas:</strong> Positif, Netral, dan Negatif.
+            </p>
+            <p>
+                Contoh penerapannya adalah analisis opini publik terhadap suatu
+                isu dan analisis ulasan produk untuk mengetahui kepuasan pelanggan.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>Web Usage Mining</h2>
+            <p>
+                Web Usage Mining berfokus pada ekstraksi informasi dari data
+                yang dihasilkan melalui kunjungan halaman web dan transaksi.
+            </p>
+            <ul>
+                <li>Server access log.</li>
+                <li>Referer log.</li>
+                <li>Agent log.</li>
+                <li>Client-side cookie.</li>
+                <li>Metadata halaman, konten, dan penggunaan.</li>
+                <li>Clickstream atau catatan urutan klik pengguna.</li>
+            </ul>
+            <p>
+                <strong>Contoh aplikasi:</strong> Product Recommendation dan
+                Personalized Search.
+            </p>
+        </div>
+
+        <div class="content-card">
+            <h2>Web Structure Mining</h2>
+            <p>
+                Web Structure Mining berfokus pada penemuan dan interpretasi
+                pola dalam struktur tautan (hyperlink) di internet serta
+                hubungan sosial antaraktor.
+            </p>
+            <p>
+                Dalam Web Graph, halaman web direpresentasikan sebagai
+                <strong>node</strong> dan hyperlink sebagai <strong>edge</strong>.
+            </p>
+            <ul>
+                <li>Menentukan otoritas halaman, seperti PageRank.</li>
+                <li>Mendeteksi komunitas online.</li>
+                <li>Menganalisis jaringan sosial digital.</li>
+                <li>Mengidentifikasi simpul penting melalui centrality.</li>
+            </ul>
+        </div>
+
+        <div class="content-card">
+            <h2>Web Mining sebagai Gabungan Beberapa Bidang</h2>
+            <p>
+                Web Mining merupakan bidang yang menggabungkan beberapa
+                disiplin ilmu, antara lain:
+            </p>
+
+            <div class="topic-grid">
+                <div class="topic-card">
+                    <h3>Natural Language Processing</h3>
+                    <p>Digunakan untuk pengolahan dan pemahaman data teks.</p>
+                </div>
+
+                <div class="topic-card">
+                    <h3>Machine Learning</h3>
+                    <p>Digunakan untuk menemukan pola dan membangun model dari data.</p>
+                </div>
+
+                <div class="topic-card">
+                    <h3>Database Systems</h3>
+                    <p>Mendukung penyimpanan dan pengelolaan data.</p>
+                </div>
+
+                <div class="topic-card">
+                    <h3>Social Network Analysis</h3>
+                    <p>Menganalisis hubungan dan interaksi dalam jaringan sosial.</p>
+                </div>
+
+                <div class="topic-card">
+                    <h3>Graph Mining</h3>
+                    <p>Menganalisis pola pada data yang direpresentasikan sebagai graph.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2>Proses Web Mining</h2>
+
+            <h3>1. Gathering and Exploration</h3>
+            <p>
+                Tahap pengumpulan dan eksplorasi data web yang meliputi crawling
+                dokumen atau data, penggunaan Web API, memahami data, membuat
+                ringkasan statistik, dan visualisasi data.
+            </p>
+
+            <h3>2. Preprocessing and Transformation</h3>
+            <p>
+                Tahap mentransformasikan data ke representasi yang sesuai dengan
+                metode data mining. Prosesnya dapat meliputi reduksi dimensi,
+                seleksi fitur, diskritisasi dan binarisasi, transformasi teks
+                menjadi vektor atau embedding, serta integrasi berbagai sumber data.
+            </p>
+
+            <h3>3. Actual Data Mining</h3>
+            <p>
+                Data yang telah diproses digunakan sebagai input untuk menghasilkan
+                model atau pola. Tahap ini meliputi penggunaan metode data mining,
+                evaluasi model atau pola, dan iterasi.
+            </p>
+            <ul>
+                <li>Eksperimen dengan hyperparameter yang berbeda.</li>
+                <li>Mencoba beberapa metode lain.</li>
+                <li>Memperbaiki preprocessing dan pembangkitan fitur.</li>
+                <li>Meningkatkan jumlah dan kualitas data pelatihan.</li>
+            </ul>
+        </div>
+
+        <div class="content-card">
             <h2>Ruang Lingkup Project</h2>
-
             <p>
-                Pada project ini, fokus utama yang dilakukan adalah
-                proses Web Crawling untuk mengumpulkan data berita
-                dari Detik.com. Data dikumpulkan dari kategori Sport
-                dan Finance.
+                Pada project ini, penerapan Web Mining dilakukan melalui proses
+                <strong>Web Crawling</strong> untuk mengumpulkan data berita dari
+                Detik.com pada kategori <strong>Sport</strong> dan
+                <strong>Finance</strong>.
             </p>
-
             <p>
-                Data hasil crawling kemudian disimpan dalam bentuk
-                dataset CSV dan ditampilkan pada halaman Hasil Crawling.
+                Data hasil crawling kemudian disimpan dalam dataset CSV dan
+                digunakan pada tahap <strong>Web Data Preprocessing</strong>,
+                <strong>TF-IDF</strong>, serta <strong>reduksi dimensi menggunakan PCA</strong>.
             </p>
-
         </div>
 
     </section>
