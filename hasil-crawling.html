@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Web Mining - Hasil Crawling</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+        <div class="logo">WM</div>
+
+        <div>
+            <h2>WEB MINING</h2>
+            <p>Web Mining Project</p>
+        </div>
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+        <a href="index.html" class="menu-item">
+            <span>⌂</span>
+            <span>Beranda</span>
+        </a>
+
+        <a href="profil.html" class="menu-item">
+            <span>👤</span>
+            <span>Profil</span>
+        </a>
+
+        <a href="pengantar.html" class="menu-item">
+            <span>📖</span>
+            <span>Pengantar Web Mining</span>
+        </a>
+
+        <a href="crawling.html" class="menu-item">
+            <span>🕷</span>
+            <span>Crawling</span>
+        </a>
+
+        <a href="hasil-crawling.html" class="menu-item active">
+            <span>📊</span>
+            <span>Hasil Crawling</span>
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+        <p>Web Mining</p>
+        <small>2026</small>
+    </div>
+
+</aside>
+
+
+<main class="main-content">
+
+    <header class="topbar">
+        <span>Web Mining</span>
+        <span>/</span>
+        <strong>Hasil Crawling</strong>
+    </header>
+
+
+    <section class="page-content">
+
+        <div class="section-heading">
+
+            <span class="section-number">01</span>
+
+            <div>
+                <h2>Hasil Crawling</h2>
+                <p>Dataset berita hasil proses crawling</p>
+            </div>
+
+        </div>
+
+
+        <div class="content-card">
+
+            <h2>Dataset Berita Detik.com</h2>
+
+            <p>
+                Dataset berikut merupakan hasil dari proses crawling
+                berita pada kategori Sport dan Finance.
+            </p>
+
+            <p>
+                Dataset terdiri dari tiga kolom utama, yaitu
+                <strong>id</strong>, <strong>isi_berita</strong>,
+                dan <strong>label</strong>.
+            </p>
+
+        </div>
+
+
+        <div class="stats-container">
+
+            <div class="stat-card">
+                <span class="stat-number">200</span>
+                <span class="stat-label">Total Data</span>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-number">100</span>
+                <span class="stat-label">Sport</span>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-number">100</span>
+                <span class="stat-label">Finance</span>
+            </div>
+
+        </div>
+
+
+        <div class="dataset-info">
+
+            <h3>Informasi Dataset</h3>
+
+            <ul>
+                <li><strong>Sumber:</strong> Detik.com</li>
+                <li><strong>Jumlah data:</strong> 200 berita</li>
+                <li><strong>Kategori:</strong> Sport dan Finance</li>
+                <li><strong>Format:</strong> CSV</li>
+                <li><strong>Nama file:</strong> dataset_detik.csv</li>
+            </ul>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <div class="table-header">
+
+                <div>
+                    <h2>Data Berita</h2>
+                    <p>
+                        Menampilkan data dari dataset_detik.csv
+                    </p>
+                </div>
+
+                <a
+                    href="dataset_detik.csv"
+                    download
+                    class="download-btn"
+                >
+                    ⬇ Download CSV
+                </a>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table id="dataset-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Isi Berita</th>
+                            <th>Label</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="dataset-body">
+
+                        <tr>
+                            <td colspan="3">
+                                Memuat dataset...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+        <p>© 2026 Web Mining Project</p>
+        <p>Universitas Trunojoyo Madura</p>
+    </footer>
+
+</main>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>

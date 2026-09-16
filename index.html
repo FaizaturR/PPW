@@ -3,203 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Web Mining | Teknik Informatika</title>
-
+    <title>Web Mining - Beranda</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+<aside class="sidebar">
 
-        <div class="sidebar-header">
+    <div class="sidebar-header">
+        <div class="logo">WM</div>
+        <div>
             <h2>WEB MINING</h2>
-            <p>Teknik Informatika</p>
+            <p>Web Mining Project</p>
         </div>
+    </div>
 
-        <nav class="sidebar-menu">
+    <nav class="sidebar-menu">
 
-            <a href="#beranda" class="active">
-                <span>⌂</span>
-                Beranda
-            </a>
+        <a href="index.html" class="menu-item active">
+            <span>⌂</span>
+            <span>Beranda</span>
+        </a>
 
-            <a href="#profil">
-                <span>👤</span>
-                Profil
-            </a>
+        <a href="profil.html" class="menu-item">
+            <span>👤</span>
+            <span>Profil</span>
+        </a>
 
-            <a href="#pengantar">
-                <span>📚</span>
-                Pengantar Web Mining
-            </a>
+        <a href="pengantar.html" class="menu-item">
+            <span>📖</span>
+            <span>Pengantar Web Mining</span>
+        </a>
 
-        </nav>
+        <a href="crawling.html" class="menu-item">
+            <span>🕷</span>
+            <span>Crawling</span>
+        </a>
 
-        <div class="sidebar-footer">
-            <p>Universitas Trunojoyo Madura</p>
-        </div>
+        <a href="hasil-crawling.html" class="menu-item">
+            <span>📊</span>
+            <span>Hasil Crawling</span>
+        </a>
 
-    </aside>
+    </nav>
+
+    <div class="sidebar-footer">
+        <p>Web Mining</p>
+        <small>2026</small>
+    </div>
+
+</aside>
 
 
-    <!-- KONTEN UTAMA -->
-    <main class="main-content">
+<main class="main-content">
+
+    <header class="topbar">
+        <span>Web Mining</span>
+        <span>/</span>
+        <strong>Beranda</strong>
+    </header>
 
 
-        <!-- BERANDA -->
-        <section id="beranda" class="hero">
+    <section class="page-content">
 
-            <div class="hero-content">
+        <div class="welcome-card">
 
-                <p class="small-title">
-                    TEKNIK INFORMATIKA
-                </p>
+            <div>
+                <span class="welcome-label">WEB MINING PROJECT</span>
 
                 <h1>
-                    WEB MINING
+                    Selamat Datang di
+                    <strong>Web Mining</strong>
                 </h1>
 
-                <p class="description">
-                    Pencarian dan Penambangan Web
+                <p>
+                    Website ini merupakan dokumentasi tugas Web Mining
+                    yang mencakup pengantar Web Mining, proses crawling,
+                    serta hasil data berita yang diperoleh dari website
+                    Detik.com.
+                </p>
+            </div>
+
+            <div class="welcome-icon">
+                🕸️
+            </div>
+
+        </div>
+
+
+        <div class="section-heading">
+            <span class="section-number">01</span>
+
+            <div>
+                <h2>Project Web Mining</h2>
+                <p>Dokumentasi proses dan hasil Web Mining</p>
+            </div>
+        </div>
+
+
+        <div class="info-grid">
+
+            <div class="info-card">
+                <div class="info-icon">📖</div>
+
+                <h3>Pengantar Web Mining</h3>
+
+                <p>
+                    Penjelasan mengenai pengertian, konsep,
+                    dan ruang lingkup Web Mining.
                 </p>
 
-                <a href="#profil" class="btn">
-                    Lihat Profil
+                <a href="pengantar.html">
+                    Lihat Materi →
                 </a>
+            </div>
+
+
+            <div class="info-card">
+                <div class="info-icon">🕷</div>
+
+                <h3>Crawling</h3>
+
+                <p>
+                    Dokumentasi source code Python yang digunakan
+                    untuk mengambil data berita.
+                </p>
+
+                <a href="crawling.html">
+                    Lihat Crawling →
+                </a>
+            </div>
+
+
+            <div class="info-card">
+                <div class="info-icon">📊</div>
+
+                <h3>Hasil Crawling</h3>
+
+                <p>
+                    Dataset berita hasil crawling dari kategori
+                    Sport dan Finance.
+                </p>
+
+                <a href="hasil-crawling.html">
+                    Lihat Dataset →
+                </a>
+            </div>
+
+        </div>
+
+
+        <div class="dataset-summary">
+
+            <div class="summary-header">
+
+                <div>
+                    <span class="small-label">DATASET</span>
+
+                    <h2>Dataset Berita Detik.com</h2>
+                </div>
+
+                <div class="dataset-icon">📁</div>
 
             </div>
 
-        </section>
 
+            <div class="summary-grid">
 
-        <!-- PROFIL -->
-        <section id="profil" class="section">
+                <div class="summary-card">
+                    <span class="summary-number">200</span>
+                    <span class="summary-label">Total Berita</span>
+                </div>
 
-            <div class="container">
+                <div class="summary-card">
+                    <span class="summary-number">100</span>
+                    <span class="summary-label">Sport</span>
+                </div>
 
-                <p class="section-title">
-                    PROFIL MAHASISWA
-                </p>
-
-                <h2>
-                    Profil Saya
-                </h2>
-
-                <div class="profile-card">
-
-                    <div class="profile-item">
-                        <span>Nama</span>
-                        <strong>Nama Anda</strong>
-                    </div>
-
-                    <div class="profile-item">
-                        <span>NPM</span>
-                        <strong>NPM Anda</strong>
-                    </div>
-
-                    <div class="profile-item">
-                        <span>Email</span>
-                        <strong>Email Anda</strong>
-                    </div>
-
-                    <div class="profile-item">
-                        <span>Program Studi</span>
-                        <strong>Teknik Informatika</strong>
-                    </div>
-
-                    <div class="profile-item">
-                        <span>Universitas</span>
-                        <strong>Universitas Trunojoyo Madura</strong>
-                    </div>
-
+                <div class="summary-card">
+                    <span class="summary-number">100</span>
+                    <span class="summary-label">Finance</span>
                 </div>
 
             </div>
 
-        </section>
+        </div>
 
 
-        <!-- PENGANTAR WEB MINING -->
-        <section id="pengantar" class="section webmining-section">
+        <div class="description-card">
 
-            <div class="container">
-
-                <p class="section-title">
-                    MATERI
-                </p>
-
-                <h2>
-                    Pengantar Web Mining
-                </h2>
-
-                <div class="materi">
-
-                    <h3>1. Apa itu Web Mining?</h3>
-
-                    <p>
-                        Web Mining adalah proses menemukan dan mengekstrak
-                        informasi dari internet menggunakan berbagai teknik
-                        penambangan data.
-                    </p>
-
-
-                    <h3>2. Web Content Mining</h3>
-
-                    <p>
-                        Web Content Mining merupakan proses mengekstrak
-                        informasi berguna dari dokumen-dokumen web.
-                        Fokusnya pada konten halaman web seperti teks,
-                        gambar, audio, video, serta data terstruktur.
-                    </p>
-
-
-                    <h3>3. Web Usage Mining</h3>
-
-                    <p>
-                        Web Usage Mining merupakan proses ekstraksi informasi
-                        dari data yang dihasilkan melalui kunjungan halaman
-                        web dan transaksi.
-                    </p>
-
-
-                    <h3>4. Web Structure Mining</h3>
-
-                    <p>
-                        Web Structure Mining merupakan proses penemuan dan
-                        interpretasi pola dalam struktur tautan atau hyperlink
-                        di internet serta hubungan sosial antar pelaku yang
-                        berinteraksi di web.
-                    </p>
-
-
-                    <h3>5. Proses Web Mining</h3>
-
-                    <p>
-                        Proses Web Mining meliputi pengumpulan dan eksplorasi
-                        data, preprocessing dan transformasi, actual data
-                        mining, serta evaluasi model atau pola yang dihasilkan.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- FOOTER -->
-        <footer>
+            <h2>Tentang Website</h2>
 
             <p>
-                © 2026 Web Mining | Teknik Informatika
+                Website ini dibuat sebagai bagian dari tugas Web Mining.
+                Data yang digunakan berupa berita dari website Detik.com
+                dengan dua kategori, yaitu Sport dan Finance.
             </p>
 
-        </footer>
+            <p>
+                Proses crawling dilakukan menggunakan Python dengan
+                library requests, BeautifulSoup, dan Trafilatura.
+                Data yang berhasil dikumpulkan kemudian disimpan
+                dalam dataset CSV.
+            </p>
 
-    </main>
+            <p>
+                Source code proses crawling dapat dilihat pada menu
+                <strong>Crawling</strong>, sedangkan data hasil crawling
+                dapat dilihat pada menu <strong>Hasil Crawling</strong>.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+        <p>© 2026 Web Mining Project</p>
+        <p>Universitas Trunojoyo Madura</p>
+    </footer>
+
+</main>
 
 </body>
 </html>

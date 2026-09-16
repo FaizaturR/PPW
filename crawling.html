@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Web Mining - Crawling</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+        <div class="logo">WM</div>
+
+        <div>
+            <h2>WEB MINING</h2>
+            <p>Web Mining Project</p>
+        </div>
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+        <a href="index.html" class="menu-item">
+            <span>⌂</span>
+            <span>Beranda</span>
+        </a>
+
+        <a href="profil.html" class="menu-item">
+            <span>👤</span>
+            <span>Profil</span>
+        </a>
+
+        <a href="pengantar.html" class="menu-item">
+            <span>📖</span>
+            <span>Pengantar Web Mining</span>
+        </a>
+
+        <a href="crawling.html" class="menu-item active">
+            <span>🕷</span>
+            <span>Crawling</span>
+        </a>
+
+        <a href="hasil-crawling.html" class="menu-item">
+            <span>📊</span>
+            <span>Hasil Crawling</span>
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+        <p>Web Mining</p>
+        <small>2026</small>
+    </div>
+
+</aside>
+
+
+<main class="main-content">
+
+    <header class="topbar">
+        <span>Web Mining</span>
+        <span>/</span>
+        <strong>Crawling</strong>
+    </header>
+
+
+    <section class="page-content">
+
+        <div class="section-heading">
+
+            <span class="section-number">01</span>
+
+            <div>
+                <h2>Crawling</h2>
+                <p>Proses pengumpulan data berita dari Detik.com</p>
+            </div>
+
+        </div>
+
+
+        <div class="content-card">
+
+            <h2>Proses Web Crawling</h2>
+
+            <p>
+                Pada tahap crawling, data berita dikumpulkan dari
+                website Detik.com menggunakan bahasa pemrograman Python.
+            </p>
+
+            <p>
+                Data yang dikumpulkan berasal dari dua kategori berita,
+                yaitu <strong>Sport</strong> dan <strong>Finance</strong>.
+                Masing-masing kategori ditargetkan sebanyak 100 berita.
+            </p>
+
+            <p>
+                Proses pengambilan link menggunakan library
+                <strong>Requests</strong> dan <strong>BeautifulSoup</strong>,
+                sedangkan isi berita diekstraksi menggunakan
+                <strong>Trafilatura</strong>.
+            </p>
+
+        </div>
+
+
+        <div class="crawl-info-grid">
+
+            <div class="crawl-card">
+                <div class="crawl-icon">🌐</div>
+                <h3>Sumber</h3>
+                <p>Detik.com</p>
+            </div>
+
+            <div class="crawl-card">
+                <div class="crawl-icon">🏅</div>
+                <h3>Sport</h3>
+                <p>100 berita</p>
+            </div>
+
+            <div class="crawl-card">
+                <div class="crawl-icon">💰</div>
+                <h3>Finance</h3>
+                <p>100 berita</p>
+            </div>
+
+            <div class="crawl-card">
+                <div class="crawl-icon">📊</div>
+                <h3>Total</h3>
+                <p>200 berita</p>
+            </div>
+
+        </div>
+
+
+        <!-- CODE 1 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>01</span>
+
+                <div>
+                    <h2>Import Library</h2>
+                    <p>Library yang digunakan pada proses crawling</p>
+                </div>
+            </div>
+
+
+<pre><code>import requests
+from bs4 import BeautifulSoup
+import trafilatura
+import pandas as pd
+
+print("Semua library berhasil di-import!")</code></pre>
+
+        </div>
+
+
+        <!-- CODE 2 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>02</span>
+
+                <div>
+                    <h2>Crawling Link Berita Sport</h2>
+                    <p>Mengumpulkan 100 link berita Sport</p>
+                </div>
+            </div>
+
+
+<pre><code>from urllib.parse import urljoin
+import time
+
+def ambil_link_sport(target=100):
+    links = []
+
+    for halaman in range(1, 10):
+        url = f"https://sport.detik.com/indeks?page={halaman}"
+
+        response = requests.get(
+            url,
+            headers={"User-Agent": "Mozilla/5.0"}
+        )
+
+        print(f"Mengambil halaman {halaman} - Status: {response.status_code}")
+
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        for a in soup.find_all("a", href=True):
+            href = urljoin("https://sport.detik.com/", a["href"])
+
+            if "sport.detik.com" in href and "/d-" in href:
+                links.append(href)
+
+        links = list(dict.fromkeys(links))
+
+        print(f"Total link unik: {len(links)}")
+
+        if len(links) >= target:
+            break
+
+        time.sleep(1)
+
+    return links[:target]
+
+links_sport = ambil_link_sport(100)
+
+print("\nJumlah link Sport yang dikumpulkan:", len(links_sport))</code></pre>
+
+        </div>
+
+
+        <!-- CODE 3 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>03</span>
+
+                <div>
+                    <h2>Ekstraksi Isi Berita Sport</h2>
+                    <p>Mengambil isi dari berita Sport</p>
+                </div>
+            </div>
+
+
+<pre><code>data_sport = []
+
+for i, url in enumerate(links_sport, start=1):
+    try:
+        downloaded = trafilatura.fetch_url(url)
+        isi = trafilatura.extract(downloaded)
+
+        if isi:
+            data_sport.append({
+                "isi_berita": isi,
+                "label": "sport"
+            })
+
+            print(f"{i}/100 berhasil")
+        else:
+            print(f"{i}/100 gagal mengambil isi")
+
+    except Exception as e:
+        print(f"{i}/100 error: {e}")
+
+    time.sleep(1)
+
+print("\nTotal berita Sport berhasil:", len(data_sport))</code></pre>
+
+        </div>
+
+
+        <!-- CODE 4 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>04</span>
+
+                <div>
+                    <h2>Crawling Link Berita Finance</h2>
+                    <p>Mengumpulkan 100 link berita Finance</p>
+                </div>
+            </div>
+
+
+<pre><code>links_finance = []
+
+for halaman in range(1, 10):
+    url = f"https://finance.detik.com/indeks?page={halaman}"
+
+    response = requests.get(
+        url,
+        headers={"User-Agent": "Mozilla/5.0"}
+    )
+
+    print(f"Mengambil halaman {halaman} - Status: {response.status_code}")
+
+    soup_finance = BeautifulSoup(response.text, "html.parser")
+
+    for a in soup_finance.find_all("a", href=True):
+        href = urljoin("https://finance.detik.com/", a["href"])
+
+        if "finance.detik.com" in href and "/d-" in href:
+            links_finance.append(href)
+
+    links_finance = list(dict.fromkeys(links_finance))
+
+    print(f"Total link unik: {len(links_finance)}")
+
+    if len(links_finance) >= 100:
+        break
+
+    time.sleep(1)
+
+links_finance = links_finance[:100]
+
+print("\nJumlah link Finance yang dikumpulkan:", len(links_finance))</code></pre>
+
+        </div>
+
+
+        <!-- CODE 5 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>05</span>
+
+                <div>
+                    <h2>Ekstraksi Isi Berita Finance</h2>
+                    <p>Mengambil isi dari berita Finance</p>
+                </div>
+            </div>
+
+
+<pre><code>data_finance = []
+
+for i, url in enumerate(links_finance, start=1):
+    try:
+        downloaded = trafilatura.fetch_url(url)
+        isi = trafilatura.extract(downloaded)
+
+        if isi:
+            data_finance.append({
+                "isi_berita": isi,
+                "label": "finance"
+            })
+
+            print(f"{i}/100 berhasil")
+        else:
+            print(f"{i}/100 gagal mengambil isi")
+
+    except Exception as e:
+        print(f"{i}/100 error: {e}")
+
+    time.sleep(1)
+
+print("\nTotal berita Finance berhasil:", len(data_finance))</code></pre>
+
+        </div>
+
+
+        <!-- CODE 6 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>06</span>
+
+                <div>
+                    <h2>Menggabungkan Data</h2>
+                    <p>Menggabungkan data Sport dan Finance</p>
+                </div>
+            </div>
+
+
+<pre><code>data_semua = data_sport + data_finance
+
+df = pd.DataFrame(data_semua)
+
+df.insert(0, "id", range(1, len(df) + 1))
+
+print("Jumlah total data:", len(df))
+
+print("\nJumlah berdasarkan label:")
+print(df["label"].value_counts())
+
+display(df.head())</code></pre>
+
+        </div>
+
+
+        <!-- CODE 7 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>07</span>
+
+                <div>
+                    <h2>Menyimpan Dataset</h2>
+                    <p>Menyimpan data ke dalam file CSV</p>
+                </div>
+            </div>
+
+
+<pre><code>df.to_csv(
+    "dataset_detik.csv",
+    index=False,
+    sep=";",
+    encoding="utf-8-sig"
+)
+
+print("Dataset berhasil disimpan sebagai dataset_detik.csv")</code></pre>
+
+        </div>
+
+
+        <!-- CODE 8 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>08</span>
+
+                <div>
+                    <h2>Validasi Dataset</h2>
+                    <p>Memeriksa jumlah data, kolom, data kosong dan label</p>
+                </div>
+            </div>
+
+
+<pre><code>print("Jumlah baris:", len(df))
+
+print("Jumlah kolom:", len(df.columns))
+
+print("\nData kosong:")
+print(df.isnull().sum())
+
+print("\nDistribusi label:")
+print(df["label"].value_counts())</code></pre>
+
+        </div>
+
+
+        <!-- HASIL -->
+
+        <div class="crawl-result">
+
+            <h2>Hasil Proses Crawling</h2>
+
+            <div class="result-summary">
+
+                <div>
+                    <strong>200</strong>
+                    <span>Total Berita</span>
+                </div>
+
+                <div>
+                    <strong>100</strong>
+                    <span>Sport</span>
+                </div>
+
+                <div>
+                    <strong>100</strong>
+                    <span>Finance</span>
+                </div>
+
+            </div>
+
+            <p>
+                Dataset hasil crawling disimpan dengan nama
+                <strong>dataset_detik.csv</strong> dan dapat dilihat
+                pada halaman Hasil Crawling.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <footer class="footer">
+        <p>© 2026 Web Mining Project</p>
+        <p>Universitas Trunojoyo Madura</p>
+    </footer>
+
+</main>
+
+</body>
+</html>
