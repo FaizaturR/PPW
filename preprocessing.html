@@ -412,27 +412,70 @@ print(fitur_kata[:10])
                 <span>10</span>
 
                 <div>
+                    <h2>Hasil TF-IDF</h2>
+                </div>
+            </div>
+
+<pre><code>
+# Mengubah matriks TF-IDF menjadi DataFrame
+tfidf_df = pd.DataFrame(
+    tfidf_matrix.toarray(),
+    columns=vectorizer.get_feature_names_out()
+)
+
+# Menambahkan ID dan label
+tfidf_df = pd.concat([
+    df[["id"]].reset_index(drop=True),
+    tfidf_df.reset_index(drop=True),
+    df[["label"]].reset_index(drop=True)
+], axis=1)
+
+# Menampilkan hasil TF-IDF
+display(tfidf_df)
+</code></pre>
+
+
+        </div>
+
+
+        <!-- CODE 11 -->
+
+        <div class="code-section">
+
+            <div class="code-title">
+                <span>11</span>
+
+                <div>
                     <h2>Reduksi Dimensi dengan PCA</h2>
                 </div>
             </div>
 
-<pre><code>from sklearn.decomposition import PCA
+<pre><code>
+from sklearn.decomposition import PCA
 
+# Mengubah matriks TF-IDF menjadi bentuk dense
 tfidf_dense = tfidf_matrix.toarray()
 
-pca = PCA(n_components=0.90)
+# Membuat PCA menjadi 2 dimensi
+pca = PCA(n_components=2)
+
+# Melakukan reduksi dimensi
 tfidf_pca = pca.fit_transform(tfidf_dense)
 
 print("PCA berhasil dilakukan!")
 print("Ukuran data sebelum PCA :", tfidf_dense.shape)
 print("Ukuran data setelah PCA :", tfidf_pca.shape)
-print("Jumlah komponen :", pca.n_components_)
-print("Total explained variance :", pca.explained_variance_ratio_.sum())</code></pre>
+
+print("\nExplained Variance Ratio:")
+print(pca.explained_variance_ratio_)
+
+print("\nTotal Explained Variance:")
+print(pca.explained_variance_ratio_.sum())
+</code></pre>
 
 <p>
-    PCA digunakan untuk mereduksi jumlah dimensi pada matriks TF-IDF dengan tetap mempertahankan informasi sebanyak mungkin.
-    Pada implementasi ini digunakan <code>n_components=0.90</code>, sehingga PCA memilih jumlah komponen yang diperlukan untuk mempertahankan minimal 90% variasi data.
-    Dengan demikian, data TF-IDF yang semula memiliki ribuan fitur dapat direpresentasikan dengan jumlah komponen yang lebih sedikit.
+    Hasil PCA digunakan untuk mereduksi dimensi data TF-IDF dari 5.068 fitur menjadi 2 dimensi. 
+    Dua dimensi hasil reduksi direpresentasikan sebagai Principal Component 1 (PC1) dan Principal Component 2 (PC2). Hasil PCA ini kemudian dapat digunakan untuk visualisasi persebaran data berdasarkan label Sport dan Finance.
 </p>
 
         </div>
@@ -445,14 +488,14 @@ print("Total explained variance :", pca.explained_variance_ratio_.sum())</code><
             <h2>Hasil Reduksi Dimensi PCA</h2>
 
             <p>
-                Hasil PCA digunakan untuk melihat perubahan dimensi data TF-IDF setelah reduksi.
-                Berdasarkan hasil notebook, data yang semula berukuran <strong>200 × 5.068</strong> fitur direduksi menjadi sekitar <strong>200 × 138</strong> komponen dengan total explained variance sekitar <strong>90%</strong>.
+                Hasil PCA digunakan untuk mereduksi dimensi data TF-IDF dari 5.068 fitur menjadi 2 dimensi. Dua dimensi hasil reduksi direpresentasikan sebagai Principal Component 1 (PC1) dan Principal Component 2 (PC2). Hasil PCA ini kemudian dapat digunakan untuk visualisasi persebaran data berdasarkan label Sport dan Finance.
             </p>
 
             <div style="margin-top:20px; padding:18px; border-radius:12px; background:#f5f7fb;">
                 <p><strong>Sebelum PCA:</strong> 200 dokumen × 5.068 fitur</p>
-                <p><strong>Setelah PCA:</strong> 200 dokumen × 138 komponen</p>
-                <p><strong>Tujuan:</strong> mengurangi jumlah dimensi tanpa kehilangan sebagian besar informasi/variasi data.</p>
+                <p><strong>Setelah PCA:</strong> 200 dokumen × 2 komponen</p>
+                <p><strong>Komponen:</strong> PC1 dan PC2</p>
+                <p><strong>Tujuan:</strong> mengurangi dimensi data TF-IDF agar dapat divisualisasikan dalam dua dimensi.</p>
             </div>
 
         </div>
