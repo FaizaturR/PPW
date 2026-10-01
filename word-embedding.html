@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Mining - Word Embedding Skip-Gram</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .embedding-intro{padding:30px 34px;margin-bottom:28px;color:#fff;background:linear-gradient(120deg,#12343b,#176b87 68%,#3b8d78);border-radius:14px}
+        .embedding-intro .eyebrow{color:#c4e4dd;font-size:11px;font-weight:700;letter-spacing:1.5px}
+        .embedding-intro h1{margin:10px 0;font-size:30px}
+        .embedding-intro p{max-width:760px;color:#e4f0f1;line-height:1.7}
+        .embedding-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:28px}
+        .embedding-stat,.parameter-panel,.results-panel{background:#fff;border:1px solid #e2e9e8;border-radius:10px}
+        .embedding-stat{padding:18px}
+        .embedding-stat strong{display:block;color:#12343b;font-size:25px}
+        .embedding-stat span{display:block;margin-top:5px;color:#718187;font-size:12px}
+        .parameter-panel,.results-panel{margin-bottom:28px;overflow:hidden}
+        .panel-heading{padding:20px 22px;border-bottom:1px solid #e8eeee}
+        .panel-heading h2{color:#12343b;font-size:18px}
+        .panel-heading p{margin-top:5px;color:#718187;font-size:13px;line-height:1.6}
+        .parameter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#e8eeee}
+        .parameter{padding:17px 20px;background:#fff}
+        .parameter span{display:block;color:#718187;font-size:12px}
+        .parameter strong{display:block;margin-top:6px;color:#176b87;font-size:16px}
+        .method-note{margin:18px 22px 22px;padding:14px 16px;border-left:3px solid #3b8d78;background:#f1f8f5;color:#42585a;font-size:13px;line-height:1.7}
+        .results-controls{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid #e8eeee}
+        .results-controls input,.results-controls select{min-height:40px;padding:8px 11px;border:1px solid #ccd8d8;border-radius:6px;background:#fff;color:#24343a;font:inherit;font-size:13px}
+        .results-controls input{flex:1;min-width:160px}
+        .results-controls input:focus,.results-controls select:focus{outline:2px solid #8bc4b4;outline-offset:1px}
+        .csv-download,.pager button{min-height:38px;padding:8px 12px;border:1px solid #176b87;border-radius:6px;color:#176b87;background:#fff;font:inherit;font-size:13px;text-decoration:none;cursor:pointer}
+        .csv-download:hover,.pager button:hover:not(:disabled){color:#fff;background:#176b87}
+        .table-scroll{overflow-x:auto}
+        .vector-table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:13px}
+        .vector-table th,.vector-table td{padding:12px 16px;border-bottom:1px solid #edf1f1;text-align:left}
+        .vector-table th{color:#53676c;background:#f5f8f8;font-size:11px;text-transform:uppercase}
+        .vector-table td:not(:first-child):not(:last-child){font-variant-numeric:tabular-nums}
+        .label-pill{display:inline-block;padding:4px 8px;border-radius:4px;background:#e7f3ef;color:#276b57;font-size:11px;font-weight:700;text-transform:capitalize}
+        .label-pill.finance{background:#fff2df;color:#8b5b17}
+        .table-status,.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;color:#718187;font-size:12px}
+        .pager div{display:flex;gap:8px}
+        .pager button:disabled{border-color:#dce4e4;color:#a2aeaf;cursor:not-allowed}
+        @media(max-width:800px){.embedding-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.parameter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:560px){.embedding-intro{padding:24px 20px}.embedding-intro h1{font-size:25px}.embedding-stats{gap:9px}.embedding-stat{padding:14px}.parameter-grid{grid-template-columns:1fr 1fr}.results-controls{align-items:stretch;flex-direction:column}.results-controls input{min-width:0}.table-status,.pager{align-items:flex-start;flex-direction:column}}
+    </style>
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-header"><div class="logo">WM</div><div><h2>WEB MINING</h2><p>Web Mining Project</p></div></div>
+    <nav class="sidebar-menu">
+        <a href="index.html" class="menu-item"><span>⌂</span><span>Beranda</span></a>
+        <a href="profil.html" class="menu-item"><span>👤</span><span>Profil</span></a>
+        <a href="pengantar.html" class="menu-item"><span>📖</span><span>Pengantar Web Mining</span></a>
+        <a href="crawling.html" class="menu-item"><span>🕷</span><span>Crawling</span></a>
+        <a href="hasil-crawling.html" class="menu-item"><span>📊</span><span>Hasil Crawling</span></a>
+        <a href="preprocessing.html" class="menu-item"><span>⚙️</span><span>Preprocessing &amp; TF-IDF</span></a>
+        <a href="word-embedding.html" class="menu-item active" aria-current="page"><span>⌁</span><span>Word Embedding</span></a>
+    </nav>
+    <div class="sidebar-footer"><p>Web Mining</p><small>2026</small></div>
+</aside>
+<main class="main-content">
+    <header class="topbar"><span>Web Mining</span><span>/</span><strong>Word Embedding Skip-Gram</strong></header>
+    <section class="page-content">
+        <div class="embedding-intro">
+            <span class="eyebrow">REPRESENTASI TEKS</span>
+            <h1>Word Embedding Skip-Gram</h1>
+            <p>Word2Vec Skip-Gram mempelajari representasi numerik kata dari konteksnya. Vektor setiap kata dalam berita kemudian dirata-ratakan untuk membentuk satu vektor representasi dokumen.</p>
+        </div>
+        <div class="embedding-stats" aria-live="polite">
+            <div class="embedding-stat"><strong id="total-count">-</strong><span>Total dokumen</span></div>
+            <div class="embedding-stat"><strong id="sport-count">-</strong><span>Label Sport</span></div>
+            <div class="embedding-stat"><strong id="finance-count">-</strong><span>Label Finance</span></div>
+            <div class="embedding-stat"><strong>5</strong><span>Dimensi vektor</span></div>
+        </div>
+        <section class="parameter-panel" aria-labelledby="parameter-title">
+            <div class="panel-heading"><h2 id="parameter-title">Konfigurasi model</h2><p>Parameter yang digunakan pada notebook word_embedding_skipgram_angka.</p></div>
+            <div class="parameter-grid">
+                <div class="parameter"><span>Algoritma</span><strong>Skip-Gram (sg=1)</strong></div>
+                <div class="parameter"><span>Dimensi vektor</span><strong>5</strong></div>
+                <div class="parameter"><span>Ukuran konteks</span><strong>5 kata</strong></div>
+                <div class="parameter"><span>Frekuensi minimum</span><strong>1 kata</strong></div>
+                <div class="parameter"><span>Random seed</span><strong>42</strong></div>
+                <div class="parameter"><span>Jumlah worker</span><strong>4</strong></div>
+            </div>
+            <p class="method-note"><strong>Catatan hasil:</strong> tabel di bawah memuat vektor dokumen (rata-rata embedding kata), bukan vektor setiap kata. Model menyimpan embedding kata di memori notebook; CSV yang tersedia adalah <code>hasil_vsm_hapus_angka.csv</code>.</p>
+        </section>
+        <section class="results-panel" aria-labelledby="results-title">
+            <div class="panel-heading"><h2 id="results-title">Hasil vektor dokumen</h2><p>Setiap baris mewakili satu berita dengan lima nilai fitur hasil Skip-Gram.</p></div>
+            <div class="results-controls">
+                <input id="search-input" type="search" placeholder="Cari berdasarkan ID..." aria-label="Cari berdasarkan ID">
+                <select id="label-filter" aria-label="Filter label"><option value="all">Semua label</option><option value="sport">Sport</option><option value="finance">Finance</option></select>
+                <a class="csv-download" href="hasil_vsm_hapus_angka.csv" download>Unduh CSV</a>
+            </div>
+            <div class="table-scroll"><table class="vector-table">
+                <thead><tr><th>ID</th><th>Vector 1</th><th>Vector 2</th><th>Vector 3</th><th>Vector 4</th><th>Vector 5</th><th>Label</th></tr></thead>
+                <tbody id="vector-body"><tr><td colspan="7">Memuat data...</td></tr></tbody>
+            </table></div>
+            <div class="table-status"><span id="result-count">Memuat data...</span><span>Sumber: hasil_vsm_hapus_angka.csv</span></div>
+            <div class="pager"><span id="page-indicator">Halaman 1</span><div><button id="previous-page" type="button" disabled>Sebelumnya</button><button id="next-page" type="button" disabled>Berikutnya</button></div></div>
+        </section>
+    </section>
+    <footer class="footer"><p>© 2026 Web Mining Project</p><p>Universitas Trunojoyo Madura</p></footer>
+</main>
+<script>
+    const pageSize = 20;
+    let vectors = [];
+    let currentPage = 1;
+
+    function parseCSV(text) {
+        const rows = [];
+        let row = [];
+        let field = "";
+        let quoted = false;
+        for (let index = 0; index < text.length; index++) {
+            const character = text[index];
+            if (character === '"') {
+                if (quoted && text[index + 1] === '"') { field += '"'; index++; }
+                else quoted = !quoted;
+            } else if (character === "," && !quoted) {
+                row.push(field); field = "";
+            } else if ((character === "\n" || character === "\r") && !quoted) {
+                if (character === "\r" && text[index + 1] === "\n") index++;
+                row.push(field);
+                if (row.some(value => value !== "")) rows.push(row);
+                row = []; field = "";
+            } else field += character;
+        }
+        if (field !== "" || row.length) { row.push(field); rows.push(row); }
+        return rows;
+    }
+
+    function renderTable() {
+        const query = document.getElementById("search-input").value.trim().toLowerCase();
+        const label = document.getElementById("label-filter").value;
+        const filtered = vectors.filter(item => item.id.toLowerCase().includes(query) && (label === "all" || item.label === label));
+        const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+        currentPage = Math.min(currentPage, pageCount);
+        const start = (currentPage - 1) * pageSize;
+        const shown = filtered.slice(start, start + pageSize);
+        const body = document.getElementById("vector-body");
+        body.replaceChildren();
+        if (!shown.length) {
+            const row = body.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 7;
+            cell.textContent = "Tidak ada data yang cocok.";
+        } else shown.forEach(item => {
+            const row = body.insertRow();
+            [item.id, ...item.values].forEach(value => { row.insertCell().textContent = value; });
+            const labelCell = row.insertCell();
+            const pill = document.createElement("span");
+            pill.className = `label-pill ${item.label}`;
+            pill.textContent = item.label;
+            labelCell.appendChild(pill);
+        });
+        document.getElementById("result-count").textContent = `Menampilkan ${shown.length ? start + 1 : 0}-${start + shown.length} dari ${filtered.length} data`;
+        document.getElementById("page-indicator").textContent = `Halaman ${currentPage} dari ${pageCount}`;
+        document.getElementById("previous-page").disabled = currentPage <= 1;
+        document.getElementById("next-page").disabled = currentPage >= pageCount;
+    }
+
+    fetch("hasil_vsm_hapus_angka.csv")
+        .then(response => { if (!response.ok) throw new Error("CSV tidak ditemukan."); return response.text(); })
+        .then(text => {
+            const rows = parseCSV(text);
+            vectors = rows.slice(1).filter(row => row.length >= 7).map(row => ({ id: row[0], values: row.slice(1, 6).map(value => Number(value).toFixed(6)), label: row[6].trim().toLowerCase() }));
+            document.getElementById("total-count").textContent = vectors.length;
+            document.getElementById("sport-count").textContent = vectors.filter(item => item.label === "sport").length;
+            document.getElementById("finance-count").textContent = vectors.filter(item => item.label === "finance").length;
+            renderTable();
+        })
+        .catch(() => {
+            document.getElementById("vector-body").innerHTML = '<tr><td colspan="7">Data tidak dapat dimuat. Buka halaman melalui server lokal dan pastikan hasil_vsm_hapus_angka.csv berada di folder yang sama.</td></tr>';
+            document.getElementById("result-count").textContent = "Gagal memuat CSV";
+        });
+    document.getElementById("search-input").addEventListener("input", () => { currentPage = 1; renderTable(); });
+    document.getElementById("label-filter").addEventListener("change", () => { currentPage = 1; renderTable(); });
+    document.getElementById("previous-page").addEventListener("click", () => { currentPage--; renderTable(); });
+    document.getElementById("next-page").addEventListener("click", () => { currentPage++; renderTable(); });
+</script>
+</body>
+</html>
