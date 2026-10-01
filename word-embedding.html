@@ -10,7 +10,7 @@
         .embedding-intro .eyebrow{color:#c4e4dd;font-size:11px;font-weight:700;letter-spacing:1.5px}
         .embedding-intro h1{margin:10px 0;font-size:30px}
         .embedding-intro p{max-width:760px;color:#e4f0f1;line-height:1.7}
-        .embedding-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:28px}
+        .embedding-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:28px}
         .embedding-stat,.parameter-panel,.results-panel{background:#fff;border:1px solid #e2e9e8;border-radius:10px}
         .embedding-stat{padding:18px}
         .embedding-stat strong{display:block;color:#12343b;font-size:25px}
@@ -40,6 +40,14 @@
         .table-status,.pager{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;color:#718187;font-size:12px}
         .pager div{display:flex;gap:8px}
         .pager button:disabled{border-color:#dce4e4;color:#a2aeaf;cursor:not-allowed}
+        .word-results{margin-bottom:28px;overflow:hidden;background:#fff;border:1px solid #e2e9e8;border-radius:10px}
+        .word-results .results-controls{border-bottom:1px solid #e8eeee}
+        .word-table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:13px}
+        .word-table th,.word-table td{padding:11px 15px;border-bottom:1px solid #edf1f1;text-align:left}
+        .word-table th{color:#53676c;background:#f5f8f8;font-size:11px;text-transform:uppercase}
+        .word-table td:not(:first-child){font-variant-numeric:tabular-nums}
+        .word-table td:first-child{font-weight:700;color:#176b87}
+        @media(max-width:1000px){.embedding-stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
         @media(max-width:800px){.embedding-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.parameter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:560px){.embedding-intro{padding:24px 20px}.embedding-intro h1{font-size:25px}.embedding-stats{gap:9px}.embedding-stat{padding:14px}.parameter-grid{grid-template-columns:1fr 1fr}.results-controls{align-items:stretch;flex-direction:column}.results-controls input{min-width:0}.table-status,.pager{align-items:flex-start;flex-direction:column}}
     </style>
@@ -70,8 +78,42 @@
             <div class="embedding-stat"><strong id="total-count">-</strong><span>Total dokumen</span></div>
             <div class="embedding-stat"><strong id="sport-count">-</strong><span>Label Sport</span></div>
             <div class="embedding-stat"><strong id="finance-count">-</strong><span>Label Finance</span></div>
+            <div class="embedding-stat"><strong id="vocabulary-count">-</strong><span>Vocabulary</span></div>
             <div class="embedding-stat"><strong>5</strong><span>Dimensi vektor</span></div>
         </div>
+        <section class="code-section">
+            <div class="code-title"><span>01</span><div><h2>Kode Word Embedding Skip-Gram</h2><p>Preprocessing, pelatihan Word2Vec, dan pembentukan vektor dokumen</p></div></div>
+<pre><code>def preprocessing_angka(teks):
+    teks = teks.lower()
+    teks = re.sub(r"http\S+|www\S+", "", teks)
+    teks = re.sub(r"\d+", " ", teks)
+    teks = re.sub(r"\s+", " ", teks).strip()
+    tokens = [kata for kata in teks.split() if kata not in stop_words]
+    return [stemmer.stem(kata) for kata in tokens]
+
+df["tokens_angka"] = df["isi_berita"].apply(preprocessing_angka)
+
+model_angka = Word2Vec(
+    sentences=df["tokens_angka"].tolist(),
+    vector_size=5,
+    window=5,
+    min_count=1,
+    workers=4,
+    sg=1,
+    seed=42
+)
+
+def document_vector(tokens, model):
+    vectors = [model.wv[word] for word in tokens if word in model.wv]
+    if not vectors:
+        return np.zeros(model.vector_size)
+    return np.mean(vectors, axis=0)
+
+vsm_angka = np.array([
+    document_vector(tokens, model_angka)
+    for tokens in df["tokens_angka"]
+])</code></pre>
+        </section>
         <section class="parameter-panel" aria-labelledby="parameter-title">
             <div class="panel-heading"><h2 id="parameter-title">Konfigurasi model</h2><p>Parameter yang digunakan pada notebook word_embedding_skipgram_angka.</p></div>
             <div class="parameter-grid">
@@ -82,7 +124,20 @@
                 <div class="parameter"><span>Random seed</span><strong>42</strong></div>
                 <div class="parameter"><span>Jumlah worker</span><strong>4</strong></div>
             </div>
-            <p class="method-note"><strong>Catatan hasil:</strong> tabel di bawah memuat vektor dokumen (rata-rata embedding kata), bukan vektor setiap kata. Model menyimpan embedding kata di memori notebook; CSV yang tersedia adalah <code>hasil_vsm_hapus_angka.csv</code>.</p>
+            <p class="method-note"><strong>Catatan:</strong> tabel vocabulary menampilkan embedding setiap kata dari model. Tabel vektor dokumen menampilkan rata-rata embedding kata dalam setiap berita. Kedua hasil tersedia sebagai CSV.</p>
+        </section>
+        <section class="word-results" aria-labelledby="word-results-title">
+            <div class="panel-heading"><h2 id="word-results-title">Hasil embedding setiap kata</h2><p id="word-result-description">Memuat hasil vektor kata dari model Skip-Gram.</p></div>
+            <div class="results-controls">
+                <input id="word-search" type="search" placeholder="Cari kata..." aria-label="Cari kata dalam vocabulary">
+                <a class="csv-download" href="hasil_embedding_kata.csv" download>Unduh vektor kata CSV</a>
+            </div>
+            <div class="table-scroll"><table class="word-table">
+                <thead><tr><th>Kata</th><th>Vector 1</th><th>Vector 2</th><th>Vector 3</th><th>Vector 4</th><th>Vector 5</th></tr></thead>
+                <tbody id="word-vector-body"><tr><td colspan="6">Memuat data...</td></tr></tbody>
+            </table></div>
+            <div class="table-status"><span id="word-result-count">Memuat vocabulary...</span><span>Sumber: hasil_embedding_kata.csv</span></div>
+            <div class="pager"><span id="word-page-indicator">Halaman 1</span><div><button id="word-previous-page" type="button" disabled>Sebelumnya</button><button id="word-next-page" type="button" disabled>Berikutnya</button></div></div>
         </section>
         <section class="results-panel" aria-labelledby="results-title">
             <div class="panel-heading"><h2 id="results-title">Hasil vektor dokumen</h2><p>Setiap baris mewakili satu berita dengan lima nilai fitur hasil Skip-Gram.</p></div>
@@ -105,6 +160,8 @@
     const pageSize = 20;
     let vectors = [];
     let currentPage = 1;
+    let wordVectors = [];
+    let currentWordPage = 1;
 
     function parseCSV(text) {
         const rows = [];
@@ -159,6 +216,47 @@
         document.getElementById("next-page").disabled = currentPage >= pageCount;
     }
 
+    function renderWordTable() {
+        const query = document.getElementById("word-search").value.trim().toLowerCase();
+        const filtered = wordVectors.filter(item => item.word.toLowerCase().includes(query));
+        const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+        currentWordPage = Math.min(currentWordPage, pageCount);
+        const start = (currentWordPage - 1) * pageSize;
+        const shown = filtered.slice(start, start + pageSize);
+        const body = document.getElementById("word-vector-body");
+        body.replaceChildren();
+        if (!shown.length) {
+            const row = body.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 6;
+            cell.textContent = "Kata tidak ditemukan.";
+        } else shown.forEach(item => {
+            const row = body.insertRow();
+            [item.word, ...item.values].forEach(value => { row.insertCell().textContent = value; });
+        });
+        document.getElementById("word-result-count").textContent = `Menampilkan ${shown.length ? start + 1 : 0}-${start + shown.length} dari ${filtered.length} kata`;
+        document.getElementById("word-page-indicator").textContent = `Halaman ${currentWordPage} dari ${pageCount}`;
+        document.getElementById("word-previous-page").disabled = currentWordPage <= 1;
+        document.getElementById("word-next-page").disabled = currentWordPage >= pageCount;
+    }
+
+    fetch("hasil_embedding_kata.csv")
+        .then(response => { if (!response.ok) throw new Error("CSV embedding kata tidak ditemukan."); return response.text(); })
+        .then(text => {
+            const rows = parseCSV(text);
+            wordVectors = rows.slice(1).filter(row => row.length >= 6).map(row => ({
+                word: row[0].trim() || "(token kosong)",
+                values: row.slice(1, 6).map(value => Number(value).toFixed(6))
+            }));
+            document.getElementById("vocabulary-count").textContent = wordVectors.length.toLocaleString("id-ID");
+            document.getElementById("word-result-description").textContent = `${wordVectors.length.toLocaleString("id-ID")} kata dengan lima nilai vektor hasil pelatihan model.`;
+            renderWordTable();
+        })
+        .catch(() => {
+            document.getElementById("word-vector-body").innerHTML = '<tr><td colspan="6">Vektor kata tidak dapat dimuat. Pastikan hasil_embedding_kata.csv berada di folder yang sama.</td></tr>';
+            document.getElementById("word-result-count").textContent = "Gagal memuat embedding kata";
+        });
+
     fetch("hasil_vsm_hapus_angka.csv")
         .then(response => { if (!response.ok) throw new Error("CSV tidak ditemukan."); return response.text(); })
         .then(text => {
@@ -177,6 +275,9 @@
     document.getElementById("label-filter").addEventListener("change", () => { currentPage = 1; renderTable(); });
     document.getElementById("previous-page").addEventListener("click", () => { currentPage--; renderTable(); });
     document.getElementById("next-page").addEventListener("click", () => { currentPage++; renderTable(); });
+    document.getElementById("word-search").addEventListener("input", () => { currentWordPage = 1; renderWordTable(); });
+    document.getElementById("word-previous-page").addEventListener("click", () => { currentWordPage--; renderWordTable(); });
+    document.getElementById("word-next-page").addEventListener("click", () => { currentWordPage++; renderWordTable(); });
 </script>
 </body>
 </html>
